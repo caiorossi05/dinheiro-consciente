@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-// Classe de persistência de usuários (JDBC)
 public class UsuarioRepository {
 
 
@@ -48,7 +47,6 @@ public class UsuarioRepository {
 
             ps.executeUpdate();
 
-            // Recupera o ID gerado e atribui ao objeto
             try (ResultSet rs = ps.getGeneratedKeys()) {
                 if (rs.next()) {
                     usuario.setId(rs.getLong(1));

@@ -6,7 +6,6 @@ import java.sql.SQLException;
 
 public class ConnectionFactory {
 
-    // URL do banco com UTF-8 configurado
     private static final String URL =
             "jdbc:mysql://localhost:3306/dinheiro_consciente" +
                     "?useSSL=false" +

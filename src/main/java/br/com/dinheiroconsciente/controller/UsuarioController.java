@@ -27,18 +27,15 @@ public class UsuarioController extends HttpServlet {
         String senha = request.getParameter("senha");
 
         try {
-            // ==== CADASTRO ====
             if ("cadastro".equalsIgnoreCase(acao)) {
 
                 usuarioService.cadastrarUsuario(nome, senha);
 
-                // Redireciona com mensagem de sucesso
                 response.sendRedirect("login.html?sucesso=" +
                         encode("Cadastro realizado com sucesso! Faca seu login."));
                 return;
             }
 
-            // ==== LOGIN ====
             if ("login".equalsIgnoreCase(acao)) {
 
                 Usuario usuarioAutenticado = usuarioService.autenticarUsuario(nome, senha);
@@ -57,7 +54,6 @@ public class UsuarioController extends HttpServlet {
                 }
             }
 
-            // ==== AÇÃO INVÁLIDA ====
             response.sendRedirect("login.html?erro=" + encode("Acao invalida."));
 
         } catch (IllegalArgumentException e) {
@@ -81,15 +77,13 @@ public class UsuarioController extends HttpServlet {
 
         String acao = request.getParameter("acao");
 
-        // ==== LOGOUT ====
         if ("sair".equalsIgnoreCase(acao)) {
             HttpSession session = request.getSession(false);
             if (session != null) session.invalidate();
             response.sendRedirect("login.html?sucesso=" + encode("Logout realizado."));
             return;
         }
-
-        // Redireciona para a tela de login caso alguém tente GET direto
+        
         response.sendRedirect("login.html");
     }
 

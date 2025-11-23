@@ -26,16 +26,12 @@ public class TransacaoController extends HttpServlet {
 
     private final TransacaoService transacaoService = new TransacaoService();
 
-    // Gson configurado para serializar LocalDate como "yyyy-MM-dd"
     private final Gson gson = new GsonBuilder()
             .registerTypeAdapter(LocalDate.class,
                     (JsonSerializer<LocalDate>) (src, typeOfSrc, context) ->
                             new JsonPrimitive(src.toString()))
             .create();
 
-    // =========================================================
-    // POST — REGISTRAR TRANSAÇÃO (RF03 / RF04)
-    // =========================================================
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -97,9 +93,6 @@ public class TransacaoController extends HttpServlet {
         }
     }
 
-    // =========================================================
-    // GET — LISTAR TRANSACOES (JSON) (RF05)
-    // =========================================================
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

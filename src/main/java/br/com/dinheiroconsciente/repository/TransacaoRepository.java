@@ -20,7 +20,6 @@ public class TransacaoRepository {
              PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             if (transacao.getId() == null) {
-                // INSERT (6 parâmetros)
                 ps.setLong(1, transacao.getUsuario().getId());
                 ps.setString(2, transacao.getTipo().toString());
                 ps.setBigDecimal(3, transacao.getValor());
@@ -39,7 +38,6 @@ public class TransacaoRepository {
 
             ps.executeUpdate();
 
-            // Se for um INSERT, recupera o ID gerado pelo banco
             if (transacao.getId() == null) {
                 try (ResultSet rs = ps.getGeneratedKeys()) {
                     if (rs.next()) {
@@ -54,31 +52,26 @@ public class TransacaoRepository {
         }
     }
 
-    /**
-     * Busca todas as transações de um usuário específico (RF05).
-     */
     public List<Transacao> findAllByUsuario(Usuario usuario) {
         List<Transacao> transacoes = new ArrayList<>();
-        // Note: A coluna 'usuario_id' deve existir na sua tabela 'transacao'
         String sql = "SELECT id, tipo, valor, data, categoria, descricao FROM transacao WHERE usuario_id = ? ORDER BY data DESC";
 
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setLong(1, usuario.getId()); // Filtra pelo ID do usuário
+            ps.setLong(1, usuario.getId());
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     Transacao t = new Transacao();
 
-                    // Preenchimento do objeto Transacao com os dados do ResultSet
                     t.setId(rs.getLong("id"));
                     t.setTipo(TipoTransacao.valueOf(rs.getString("tipo")));
                     t.setValor(rs.getBigDecimal("valor"));
-                    t.setData(rs.getDate("data").toLocalDate()); // Converte java.sql.Date para java.time.LocalDate
+                    t.setData(rs.getDate("data").toLocalDate());
                     t.setCategoria(rs.getString("categoria"));
                     t.setDescricao(rs.getString("descricao"));
-                    t.setUsuario(usuario); // Reutiliza o objeto usuário já carregado
+                    t.setUsuario(usuario);
 
                     transacoes.add(t);
                 }
