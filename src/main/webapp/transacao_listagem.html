@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Transações - Dinheiro Consciente</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .tabela-transacoes {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .tabela-transacoes th, .tabela-transacoes td {
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+        .tabela-transacoes th {
+            background-color: #00796b;
+            color: white;
+        }
+        .tabela-transacoes tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .receita {
+            color: #00796b;
+            font-weight: bold;
+        }
+        .despesa {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="dashboard-content">
+    <h1>Suas Transações (RF05)</h1>
+    <p><a href="dashboard.html">Voltar ao Dashboard</a></p>
+
+    <div id="mensagens"></div>
+    <div id="areaTabela">Carregando transações...</div>
+</div>
+
+<script>
+    // 🔵 MAPA DE CATEGORIAS BONITAS (para exibição)
+    const categoriaLabels = {
+        SALARIO: "Salário",
+        INVESTIMENTOS: "Investimentos",
+        ALIMENTACAO: "Alimentação",
+        TRANSPORTE: "Transporte",
+        MORADIA: "Moradia",
+        LAZER: "Lazer",
+        OUTROS: "Outros"
+    };
+
+    fetch("transacao?action=list")
+        .then(resp => {
+            if (!resp.ok) {
+                console.error("Erro HTTP:", resp.status);
+                throw new Error("HTTP " + resp.status);
+            }
+            return resp.json();
+        })
+        .then(lista => {
+            const container = document.getElementById("areaTabela");
+
+            if (!lista || lista.length === 0) {
+                container.innerHTML =
+                    "<p>Nenhuma transação encontrada. <a href='registrar_transacao.html'>Registrar agora</a></p>";
+                return;
+            }
+
+            let html = `
+                <table class="tabela-transacoes">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Data</th>
+                            <th>Tipo</th>
+                            <th>Categoria</th>
+                            <th>Descrição</th>
+                            <th style='text-align:right;'>Valor</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            lista.forEach(t => {
+                const classe = t.tipo === "RECEITA" ? "receita" : "despesa";
+
+                const dataFormatada = t.data
+                    ? new Date(t.data).toLocaleDateString("pt-BR")
+                    : "";
+
+                const categoriaBonita =
+                    categoriaLabels[t.categoria] || t.categoria;
+
+                const valor = Number(t.valor || 0).toLocaleString("pt-BR", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+
+                html += `
+                    <tr class="${classe}">
+                        <td>${t.id}</td>
+                        <td>${dataFormatada}</td>
+                        <td>${t.tipo}</td>
+                        <td>${categoriaBonita}</td>
+                        <td>${t.descricao || ""}</td>
+                        <td style="text-align:right;">R$ ${valor}</td>
+                    </tr>
+                `;
+            });
+
+            html += `</tbody></table>`;
+            container.innerHTML = html;
+        })
+        .catch(err => {
+            console.error("Erro no fetch:", err);
+            document.getElementById("areaTabela").innerHTML =
+                "<p class='message-error'>Erro ao carregar transações.</p>";
+        });
+</script>
+
+</body>
+</html>

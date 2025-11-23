@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Registrar Transação - Dinheiro Consciente</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="form-container">
+    <h2>Registrar Nova Transação (RF03/RF04)</h2>
+
+    <!-- Mensagens -->
+    <div id="mensagens"></div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const msgDiv = document.getElementById("mensagens");
+
+        if (params.get("sucesso")) {
+            msgDiv.innerHTML =
+                "<p class='message-success'>" +
+                decodeURIComponent(params.get("sucesso")) +
+                "</p>";
+        }
+
+        if (params.get("erro")) {
+            msgDiv.innerHTML =
+                "<p class='message-error'>" +
+                decodeURIComponent(params.get("erro")) +
+                "</p>";
+        }
+    </script>
+
+    <form action="transacao" method="post">
+        <input type="hidden" name="acao" value="registrar">
+        <input type="hidden" name="action" value="register">
+
+        <div class="form-group">
+            <label for="tipo">Tipo de Transação:</label>
+            <select id="tipo" name="tipo" required>
+                <option value="RECEITA">Receita</option>
+                <option value="DESPESA">Despesa</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="valor">Valor (R$):</label>
+            <input type="number" id="valor" name="valor" step="0.01" min="0.01" placeholder="Ex: 150.50" required>
+        </div>
+
+        <div class="form-group">
+            <label for="categoria">Categoria:</label>
+            <select id="categoria" name="categoria" required>
+                <option value="">-- Selecione uma Categoria --</option>
+                <option value="SALARIO">Salário (Receita)</option>
+                <option value="INVESTIMENTOS">Investimentos (Receita)</option>
+                <option value="ALIMENTACAO">Alimentação (Despesa)</option>
+                <option value="TRANSPORTE">Transporte (Despesa)</option>
+                <option value="MORADIA">Moradia (Despesa)</option>
+                <option value="LAZER">Lazer (Despesa)</option>
+                <option value="OUTROS">Outros</option>
+            </select>
+        </div>
+
+
+        <div class="form-group">
+            <label for="data">Data:</label>
+            <input type="date" id="data" name="data" required>
+        </div>
+
+        <div class="form-group">
+            <label for="descricao">Descrição (Opcional):</label>
+            <textarea id="descricao" name="descricao" rows="3" maxlength="255"></textarea>
+        </div>
+
+        <button type="submit">Salvar Transação</button>
+    </form>
+</div>
+
+<p class="cadastro-link">
+    <a href="dashboard.html">Voltar ao Dashboard</a>
+</p>
+
+</body>
+</html>
