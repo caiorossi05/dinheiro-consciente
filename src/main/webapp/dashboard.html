@@ -115,7 +115,6 @@
 
     <div id="mensagens"></div>
 
-    <!-- INSIGHT FINANCEIRO SEMANAL (RF07) -->
     <div class="secao">
         <h2>Insight financeiro da semana</h2>
         <p id="insightTexto">Carregando insight...</p>
@@ -160,8 +159,8 @@
     <div class="secao">
         <h2>Ações rápidas</h2>
         <ul>
-            <li><a href="registrar_transacao.html">Registrar Receita/Despesa (RF03/RF04)</a></li>
-            <li><a href="transacao_listagem.html">Visualizar Todas as Transações (RF05)</a></li>
+            <li><a href="registrar_transacao.html">Registrar Receita/Despesa</a></li>
+            <li><a href="transacao_listagem.html">Visualizar Todas as Transações</a></li>
         </ul>
     </div>
 
@@ -245,7 +244,7 @@
             document.getElementById("totalDespesas").textContent = "R$ " + formatCurrency(totalDespesas);
             document.getElementById("saldo").textContent = "R$ " + formatCurrency(saldo);
 
-            // ---- INSIGHT FINANCEIRO SEMANAL (RF07) ----
+
             const insight = gerarInsightSemanal(lista);
             document.getElementById("insightTexto").innerHTML = insight;
 
@@ -364,7 +363,7 @@
         });
 
     // ==============================
-    // Função que calcula o INSIGHT SEMANAL (RF07)
+    // Função que calcula o INSIGHT SEMANAL
     // ==============================
     function gerarInsightSemanal(lista) {
         if (!lista || lista.length === 0) {
